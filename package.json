@@ -1,0 +1,19 @@
+{
+  "name": "ascii_commander",
+  "version": "1.0.0",
+  "description": "VScode extention that let you type ascii code and get the symbol",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alkhioz/ascii_commander.git"
+  },
+  "author": "Ale Mendoza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alkhioz/ascii_commander/issues"
+  },
+  "homepage": "https://github.com/Alkhioz/ascii_commander#readme"
+}
