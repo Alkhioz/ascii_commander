@@ -1,7 +1,7 @@
 {
   "name": "ascii-commander",
   "displayName": "Ascii Commander",
-  "description": "An extention that let you type ascii code and get the symbol",
+  "description": "An extension that let you type ascii code and get the symbol",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.74.0"
