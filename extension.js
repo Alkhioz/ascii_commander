@@ -13,11 +13,18 @@ function getAscii(text){
 */
 function getType(text){
 	const quote = ['34', '39', '96']
-	const parenthesis = ['40', '91', '123']
+	const parenthesis = ['40', '91', '123', '60']
 	return (quote.includes(`${text}`) ? 'QUOTE' :
 	parenthesis.includes(`${text}`) ? 'PARENTHESIS' : 'TEXT')
 }
 
+/**
+* @param {vscode.Uri} uri
+* @param {vscode.Position} start
+* @param {vscode.Position} end
+* @param {string} asciiSymbol
+* @param {vscode.WorkspaceEdit} edit
+*/
 function addQuote(uri, start, end, asciiSymbol, edit){
 	edit.insert(
 		uri,
@@ -32,6 +39,13 @@ function addQuote(uri, start, end, asciiSymbol, edit){
 	vscode.workspace.applyEdit(edit)
 }
 
+/**
+* @param {vscode.Uri} uri
+* @param {vscode.Position} start
+* @param {vscode.Position} end
+* @param {string} asciiSymbol
+* @param {vscode.WorkspaceEdit} edit
+*/
 function addParenthesis(uri, start, end, asciiSymbol, edit){
 	const otherSide = [
 		{
@@ -45,6 +59,10 @@ function addParenthesis(uri, start, end, asciiSymbol, edit){
 		{
 			key: '(',
 			value: ')'
+		},
+		{
+			key: '<',
+			value: '>'
 		},
 	]
 	edit.insert(
