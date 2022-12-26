@@ -1,8 +1,69 @@
 const vscode = require('vscode');
 
+
 /**
- * @param {vscode.ExtensionContext} context
- */
+* @param {string} text
+*/
+function getAscii(text){
+	return String.fromCharCode(parseInt(text))
+}
+
+/**
+* @param {string} text
+*/
+function getType(text){
+	const quote = ['34', '39', '96']
+	const parenthesis = ['40', '91', '123']
+	return (quote.includes(`${text}`) ? 'QUOTE' :
+	parenthesis.includes(`${text}`) ? 'PARENTHESIS' : 'TEXT')
+}
+
+function addQuote(uri, start, end, asciiSymbol, edit){
+	edit.insert(
+		uri,
+		start,
+		asciiSymbol
+	)
+	edit.insert(
+		uri,
+		end,
+		asciiSymbol
+	)
+	vscode.workspace.applyEdit(edit)
+}
+
+function addParenthesis(uri, start, end, asciiSymbol, edit){
+	const otherSide = [
+		{
+			key: '{',
+			value: '}'
+		},
+		{
+			key: '[',
+			value: ']'
+		},
+		{
+			key: '(',
+			value: ')'
+		},
+	]
+	edit.insert(
+		uri,
+		start,
+		asciiSymbol
+	)
+	const other = otherSide.find(complement=>complement.key === asciiSymbol).value
+	edit.insert(
+		uri,
+		end,
+		other
+	)
+	vscode.workspace.applyEdit(edit)
+}
+
+/**
+* @param {vscode.ExtensionContext} context
+*/
 function activate(context) {
 
 	let disposable = vscode.commands.registerCommand('ascii-commander.getAsciiSymbol', function () {
@@ -21,24 +82,29 @@ function activate(context) {
 			if(selection.isEmpty){
 				const cursorPosition = selection.active;
 				if(cursorPosition === undefined) return false
-				const asciiSymbol = String.fromCharCode(parseInt(text))
+				const asciiSymbol = getAscii(text)
 				editor.edit(editBuilder=>{
 					editBuilder.insert(cursorPosition, asciiSymbol)
 				})
 			}else{
-				const asciiSymbol = String.fromCharCode(parseInt(text))
 				const edit = new vscode.WorkspaceEdit()
-				edit.insert(
-					editor.document.uri,
-					selection.start,
-					asciiSymbol
-				)
-				edit.insert(
-					editor.document.uri,
-					selection.end,
-					asciiSymbol
-				)
-				vscode.workspace.applyEdit(edit)
+				if(edit === undefined) return false
+				const asciiSymbol = getAscii(text)
+				switch (getType(text)) {
+					case 'QUOTE':
+						addQuote(editor.document.uri, selection.start, selection.end, asciiSymbol, edit)
+					  break;
+					case 'PARENTHESIS':
+						addParenthesis(editor.document.uri, selection.start, selection.end, asciiSymbol, edit)
+					  break;
+					default:
+					  edit.replace(
+						editor.document.uri,
+						selection,
+						asciiSymbol
+					  )
+					  vscode.workspace.applyEdit(edit)
+				  }
 			}
 		})
 	});
