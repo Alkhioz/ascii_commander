@@ -10,14 +10,22 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:ascii-commander.helloWorld"
+    "onCommand:ascii-commander.getAsciiSymbol"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [{
-      "command": "ascii-commander.helloWorld",
-      "title": "Hello World"
-    }]
+      "command": "ascii-commander.getAsciiSymbol",
+      "title": "Get ascii symbol"
+    }],
+    "keybindings": [
+      {
+        "command": "ascii-commander.getAsciiSymbol",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "editorTextFocus"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
