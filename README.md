@@ -6,3 +6,4 @@ Ascii Commander is a Visual Studio Code extension that allows you to easily inse
 
 Initial release of Ascii Commander
 * Added the ability to insert ASCII symbols into your code by pressing Ctrl+Alt+A and entering the ASCII code
+* Added support to quotes and parenthesis, you can now wrap the selected text
