@@ -16,13 +16,30 @@ function activate(context) {
 			if(text === undefined) return false
 			const editor = vscode.window.activeTextEditor
 			if(editor === undefined) return false
-			const cursorPosition = vscode.window.activeTextEditor.selection.active;
-			if(cursorPosition === undefined) return false
-			const asciiSymbol = String.fromCharCode(parseInt(text))
-			editor.edit(editBuilder=>{
-				editBuilder.insert(cursorPosition, asciiSymbol)
-			})
-
+			
+			const selection = editor.selection
+			if(selection.isEmpty){
+				const cursorPosition = selection.active;
+				if(cursorPosition === undefined) return false
+				const asciiSymbol = String.fromCharCode(parseInt(text))
+				editor.edit(editBuilder=>{
+					editBuilder.insert(cursorPosition, asciiSymbol)
+				})
+			}else{
+				const asciiSymbol = String.fromCharCode(parseInt(text))
+				const edit = new vscode.WorkspaceEdit()
+				edit.insert(
+					editor.document.uri,
+					selection.start,
+					asciiSymbol
+				)
+				edit.insert(
+					editor.document.uri,
+					selection.end,
+					asciiSymbol
+				)
+				vscode.workspace.applyEdit(edit)
+			}
 		})
 	});
 
